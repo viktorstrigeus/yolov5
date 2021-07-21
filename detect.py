@@ -54,10 +54,14 @@ def detect(opt):
     else:
         backend = 'saved_model'
 
-    if backend == 'saved_model' or backend =='graph_def' or backend=='tflite':
+    if backend == 'saved_model' or backend =='graph_def':
        import tensorflow as tf
        from tensorflow import keras
        stride = None
+    if backend=='tflite':
+       from pycoral.utils.edgetpu import make_interpreter
+       stride = None
+        
 
     if backend == 'pytorch':
         model = attempt_load(weights, map_location=device)  # load FP32 model
@@ -131,10 +135,7 @@ def detect(opt):
 
     elif backend == 'tflite':
         # Load TFLite model and allocate tensors.
-        interpreter = tf.lite.Interpreter(
-            model_path=opt.weights[0],
-            experimental_delegates=
-                [tf.lite.experimental.load_delegate('libedgetpu.so.1')] if opt.edgetpu else None)
+        interpreter = make_interpreter(opt.weights[0])
         interpreter.allocate_tensors()
 
         # Get input and output tensors.
