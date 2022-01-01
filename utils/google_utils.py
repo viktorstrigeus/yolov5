@@ -36,7 +36,7 @@ def safe_download(file, url, url2=None, min_bytes=1E0, error_msg=''):
 
 def attempt_download(file, repo='ultralytics/yolov5'):
     # Attempt file download if does not exist
-    print("Attempt download "+file.name)
+    print("Attempt download "+file)
     file = Path(str(file).strip().replace("'", ''))
 
     if not file.exists():
